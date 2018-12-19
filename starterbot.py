@@ -7,8 +7,8 @@ import requests
 
 
 # instantiate Slack client
-slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
-user_client= SlackClient(os.environ.get('USER_TOKEN'))
+slack_client = SlackClient('xoxb-476560820900-505089121316-D8JK7DFCWzSgQPG6WzRFHeS1')
+user_client= SlackClient('xoxp-476560820900-477782971863-506310516039-618d90c01f576ce2df32df5109211c4d')
 
 # starterbot's user ID in Slack: value is assigned after the bot starts up
 starterbot_id = None
@@ -168,7 +168,6 @@ def handle_command(command, channel):
             )
     elif command.startswith(DELETE_COMMAND):
         listName = command[len(DELETE_COMMAND):]
-
         response = listName+" deleted"
         slack_client.api_call(
             "chat.postMessage",
@@ -177,7 +176,6 @@ def handle_command(command, channel):
         )
     elif command.startswith(HELP_COMMAND):
         response = "Try the following commands:\n   @tally add (amount (optional)) (listname)\n   @tally set (amount) (listname)\n   @tally create (listname)\n   @tally delete (listname)"
-        
         slack_client.api_call(
             "chat.postMessage",
             channel=channel,
@@ -189,6 +187,17 @@ def handle_command(command, channel):
             channel=channel,
             text= default_response
         )
+def networkCheck():
+     print ("test 1")
+        loop_value = 1
+        while loop_value == 1:
+            print ("test 2")
+            try: urllib.request.urlopen("http://www.google.com")
+            loop_value = 0
+            except urllib.error.URLError as e:
+                print(e.reason)
+                f.write( "Network currently down." )
+            time.sleep(5)
 
 
 if __name__ == "__main__":
