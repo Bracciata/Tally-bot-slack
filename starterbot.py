@@ -5,10 +5,11 @@ from slackclient import SlackClient
 import json
 import requests
 import urllib
-
+import subprocess
+import tempfile
 # instantiate Slack client
-slack_client = SlackClient('xoxb-476560820900-505089121316-9OHb6TjTEguqNwN0CTxHTjo2')
-user_client= SlackClient('xoxp-476560820900-477782971863-509272612359-6dc594b54a685e36c47f91f25a3c1fe1')
+slack_client = SlackClient('')
+user_client= SlackClient('')
 
 # starterbot's user ID in Slack: value is assigned after the bot starts up
 starterbot_id = None
@@ -197,20 +198,27 @@ def networkCheck():
             loop_value = 0
         except urllib.error.URLError as e:
             print(e.reason)
-            f.write( "Network currently down." )
         time.sleep(5)
-
-
+def checkRunning():
+    runningPrograms=""
+    with tempfile.TemporaryFile() as tempf:
+        proc = subprocess.Popen('ps -aef | grep python', stdout=tempf,shell=True)
+        proc.wait()    	    
+        tempf.seek(0)
+        runningPrograms = str(tempf.read())
+    print(runningPrograms)
+    return runningPrograms.count('python/slack/tallyBot/Tally-bot-slack/starterbot.py')
 if __name__ == "__main__":
-    networkCheck()
-    if slack_client.rtm_connect(with_team_state=False):
-        print("Starter Bot connected and running!")
-        # Read bot's user ID by calling Web API method `auth.test`
-        starterbot_id = slack_client.api_call("auth.test")["user_id"]
-        while True:
-            command, channel = parse_bot_commands(slack_client.rtm_read())
-            if command:
-                handle_command(command, channel)
-            time.sleep(RTM_READ_DELAY)
-    else:
-        print("Connection failed. Exception traceback printed above.")
+    if  checkRunning()==1:
+        networkCheck()
+        if slack_client.rtm_connect(with_team_state=False):
+            print("Starter Bot connected and running!")
+            # Read bot's user ID by calling Web API method `auth.test`
+            starterbot_id = slack_client.api_call("auth.test")["user_id"]
+            while True:
+                command, channel = parse_bot_commands(slack_client.rtm_read())
+                if command:
+                    handle_command(command, channel)
+                time.sleep(RTM_READ_DELAY)
+        else:
+            print("Connection failed. Exception traceback printed above.")
