@@ -4,7 +4,7 @@ import re
 from slackclient import SlackClient
 import json
 import requests
-
+import urllib
 
 # instantiate Slack client
 slack_client = SlackClient('xoxb-476560820900-505089121316-D8JK7DFCWzSgQPG6WzRFHeS1')
@@ -188,19 +188,21 @@ def handle_command(command, channel):
             text= default_response
         )
 def networkCheck():
-     print ("test 1")
-        loop_value = 1
-        while loop_value == 1:
-            print ("test 2")
-            try: urllib.request.urlopen("http://www.google.com")
+    print ("test 1")
+    loop_value = 1
+    while loop_value == 1:
+        print ("test 2")
+        try: 
+            urllib.request.urlopen("http://www.google.com")
             loop_value = 0
-            except urllib.error.URLError as e:
-                print(e.reason)
-                f.write( "Network currently down." )
-            time.sleep(5)
+        except urllib.error.URLError as e:
+            print(e.reason)
+            f.write( "Network currently down." )
+        time.sleep(5)
 
 
 if __name__ == "__main__":
+    networkCheck()
     if slack_client.rtm_connect(with_team_state=False):
         print("Starter Bot connected and running!")
         # Read bot's user ID by calling Web API method `auth.test`
