@@ -7,8 +7,8 @@ import requests
 import urllib
 
 # instantiate Slack client
-slack_client = SlackClient('xoxb-476560820900-505089121316-D8JK7DFCWzSgQPG6WzRFHeS1')
-user_client= SlackClient('xoxp-476560820900-477782971863-506310516039-618d90c01f576ce2df32df5109211c4d')
+slack_client = SlackClient('xoxb-476560820900-505089121316-9OHb6TjTEguqNwN0CTxHTjo2')
+user_client= SlackClient('xoxp-476560820900-477782971863-509272612359-6dc594b54a685e36c47f91f25a3c1fe1')
 
 # starterbot's user ID in Slack: value is assigned after the bot starts up
 starterbot_id = None
